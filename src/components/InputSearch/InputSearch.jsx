@@ -3,15 +3,18 @@ import Container from "../Container/Container"
 import style from './InputSearch.module.css'
 
 function InputSearch({ setData }) {
+    const apiKey = process.env.REACT_APP_API_KEY
+    const url = process.env.REACT_APP_API_URL
+    
     const [inputValue, setInputValue] = useState('')
 
     const inputChangeHandler = e => {
         setInputValue(e.target.value)
     }
 
-    const coordinates = () => {
+    const coordinates = async () => {
         if (inputValue) {
-            fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${inputValue}&limit=1&appid=67a762e7be38765a887247105167a8c4`, {
+            await fetch(`${url}/geo/1.0/direct?q=${inputValue}&limit=1&appid=${apiKey}`, {
                 method: 'GET'
             })
                 .then(response => response.json())
@@ -24,8 +27,8 @@ function InputSearch({ setData }) {
         setInputValue('')
     }
 
-    const dataOfCity = (lat, lon) => {
-        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=67a762e7be38765a887247105167a8c4`, {
+    const dataOfCity = async (lat, lon) => {
+        await fetch(`${url}/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`, {
             method: 'GET'
         })
             .then(response => response.json())
